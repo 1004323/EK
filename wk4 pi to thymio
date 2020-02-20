@@ -1,0 +1,49 @@
+from pythymiodw import *
+from time import sleep
+from libdw import pyrebase
+
+
+projectid = "dwweek4-f903e"
+dburl = "https://" + projectid + ".firebaseio.com"
+authdomain = projectid + ".firebaseapp.com"
+apikey = "AIzaSyCudVxHxSqoCjHFGhcORlwP9qVpC5cPz5A"
+email = 'cornelia376@gmail.com'
+password = "password"
+
+config = {
+    "apiKey": apikey,
+    "authDomain": authdomain,
+    "databaseURL": dburl,
+}
+
+
+firebase = pyrebase.initialize_app(config)
+auth = firebase.auth()
+user = auth.sign_in_with_email_and_password(email, password)
+db = firebase.database()
+
+robot = ThymioReal()
+
+new_lst=[]
+zhoulu=db.child('movement_list').get(user['idToken'])
+new_lst.append(zhoulu.val())
+
+if new_lst==[]:
+    no_movements = True
+
+else:
+    no_movements = False
+    for i in new_lst:
+        if i == 'forward':
+            robot.wheels(100, 100)
+            sleep(1)
+        elif i == 'left':
+            robot.wheels(-100, 100)
+            sleep(1)
+        elif i == 'right':
+            robot.wheels(100, -100)
+            sleep(1)
+
+while no_movements:
+    return ('press butt pls')
+    sleep(0.5)
